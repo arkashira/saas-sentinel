@@ -1,2 +1,5 @@
-# saas-sentinel
-axentx product · AI-powered user context and insights platform for SaaS applications to improve engagement and reduce churn
+# SaaS Sentinel
+SaaS Sentinel is a Python project that demonstrates a step-by-step quick-start guide and a runnable sample app for integrating with a SaaS platform.
+
+## Installation
+To install the project, run the following command:
