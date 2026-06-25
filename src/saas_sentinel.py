@@ -1,55 +1,31 @@
 import json
 from dataclasses import dataclass
-from argparse import ArgumentParser
 
 @dataclass
-class SaaSConfig:
-    """SaaS configuration dataclass"""
-    api_key: str
-    api_secret: str
-    redis_host: str
-    redis_port: int
+class Context:
+    """Holds the context for the SDK"""
+    data: dict
 
-def load_config(file_path: str) -> SaaSConfig:
-    """Load SaaS configuration from JSON file"""
-    try:
-        with open(file_path, 'r') as file:
-            config_data = json.load(file)
-            return SaaSConfig(**config_data)
-    except FileNotFoundError:
-        raise FileNotFoundError(f"File {file_path} not found")
-    except json.JSONDecodeError:
-        raise json.JSONDecodeError("Invalid JSON", file_path, 0)
+class SaaSSentinel:
+    """The SDK for integrating with the memory layer"""
+    def __init__(self):
+        """Initialize the SDK"""
+        self.context = None
 
-def store_data(config: SaaSConfig, data: str) -> bool:
-    """Store data in Redis"""
-    # Simulate Redis store using a dictionary
-    redis_data = {}
-    redis_data[config.api_key] = data
-    return True
+    def init(self):
+        """Initialize the SDK"""
+        self.context = Context({})
 
-def restore_data(config: SaaSConfig) -> str:
-    """Restore data from Redis"""
-    # Simulate Redis restore using a dictionary
-    redis_data = {}
-    return redis_data.get(config.api_key, '')
+    def setContext(self, data: dict):
+        """Set the context for the SDK"""
+        self.context = Context(data)
 
-def enrich_data(config: SaaSConfig, data: str) -> str:
-    """Enrich data with additional information"""
-    # Simulate data enrichment
-    enriched_data = data + ' (enriched)'
-    return enriched_data
+    def getContext(self) -> dict:
+        """Get the context for the SDK"""
+        if self.context is None:
+            raise ValueError("Context not initialized")
+        return self.context.data
 
-def main():
-    parser = ArgumentParser(description='SaaS Sentinel')
-    parser.add_argument('--config', help='Path to configuration file')
-    args = parser.parse_args()
-    config = load_config(args.config)
-    data = 'Sample data'
-    store_data(config, data)
-    restored_data = restore_data(config)
-    enriched_data = enrich_data(config, restored_data)
-    print(enriched_data)
-
-if __name__ == '__main__':
-    main()
+    def to_json(self):
+        """Convert the context to JSON"""
+        return json.dumps(self.context.data)

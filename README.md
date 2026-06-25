@@ -1,5 +1,10 @@
-# SaaS Sentinel
-SaaS Sentinel is a Python project that demonstrates a step-by-step quick-start guide and a runnable sample app for integrating with a SaaS platform.
+# SaaSSentinel
+The SDK for integrating with the memory layer.
 
-## Installation
-To install the project, run the following command:
+## Usage
+1. Initialize the SDK: `sdk = SaaSSentinel(); sdk.init()`
+2. Set the context: `sdk.setContext({"key": "value"})`
+3. Get the context: `sdk.getContext()`
+
+## Testing
+Run the tests with `python -m pytest`
