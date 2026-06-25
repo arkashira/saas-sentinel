@@ -1,42 +1,28 @@
-import json
-from saas_sentinel import SaaSSentinel
+import pytest
+from saas_sentinel import SaaSSENTINEL
 
-def test_init():
-    """Test initializing the SDK"""
-    sdk = SaaSSentinel()
-    sdk.init()
-    assert sdk.context is not None
+def test_query():
+    sentinel = SaaSSENTINEL()
+    sentinel.add_user_context(123, {'theme': 'dark', 'language': 'en'})
+    assert sentinel.query('get user preferences for user 123') == {'theme': 'dark', 'language': 'en'}
 
-def test_setContext():
-    """Test setting the context"""
-    sdk = SaaSSentinel()
-    sdk.init()
-    data = {"key": "value"}
-    sdk.setContext(data)
-    assert sdk.getContext() == data
+def test_query_non_existent_user():
+    sentinel = SaaSSENTINEL()
+    with pytest.raises(ValueError):
+        sentinel.query('get user preferences for user 123')
 
-def test_getContext():
-    """Test getting the context"""
-    sdk = SaaSSentinel()
-    sdk.init()
-    data = {"key": "value"}
-    sdk.setContext(data)
-    assert sdk.getContext() == data
+def test_query_invalid_key():
+    sentinel = SaaSSENTINEL()
+    sentinel.add_user_context(123, {'theme': 'dark', 'language': 'en'})
+    with pytest.raises(ValueError):
+        sentinel.query('get user settings for user 123')
 
-def test_getContext_not_initialized():
-    """Test getting the context when not initialized"""
-    sdk = SaaSSentinel()
-    try:
-        sdk.getContext()
-        assert False, "Expected ValueError"
-    except ValueError as e:
-        assert str(e) == "Context not initialized"
+def test_fuzzy_query():
+    sentinel = SaaSSENTINEL()
+    sentinel.add_user_context(123, {'theme': 'dark', 'language': 'en'})
+    assert sentinel.fuzzy_query('user preferences') == {'theme': 'dark', 'language': 'en'}
 
-def test_to_json():
-    """Test converting the context to JSON"""
-    sdk = SaaSSentinel()
-    sdk.init()
-    data = {"key": "value"}
-    sdk.setContext(data)
-    json_data = sdk.to_json()
-    assert json.loads(json_data) == data
+def test_fuzzy_query_no_match():
+    sentinel = SaaSSENTINEL()
+    sentinel.add_user_context(123, {'theme': 'dark', 'language': 'en'})
+    assert sentinel.fuzzy_query('settings') is None

@@ -1,10 +1,10 @@
-# SaaSSentinel
-The SDK for integrating with the memory layer.
+# SaaS Sentinel
+A simple implementation of a SaaS sentinel that allows querying user context with natural language or structured queries.
 
 ## Usage
-1. Initialize the SDK: `sdk = SaaSSentinel(); sdk.init()`
-2. Set the context: `sdk.setContext({"key": "value"})`
-3. Get the context: `sdk.getContext()`
+1. Create a `SaaSSENTINEL` instance.
+2. Add user contexts using the `add_user_context` method.
+3. Query user contexts using the `query` or `fuzzy_query` methods.
 
 ## Testing
-Run the tests with `python -m pytest`
+Run the tests using `pytest`.
